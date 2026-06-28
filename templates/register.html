@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reco Frnd - Register</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+</head>
+
+<body>
+ <header class="header">
+                <div class="logo">
+                    <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="16" y="2" width="4" height="4" transform="rotate(45 16 2)" fill="#3fbfff"/>
+                        <rect x="20" y="6" width="4" height="4" transform="rotate(45 20 6)" fill="#3fbfff"/>
+                        <rect x="24" y="10" width="4" height="4" transform="rotate(45 24 10)" fill="#3fbfff"/>
+                        <rect x="28" y="14" width="4" height="4" transform="rotate(45 28 14)" fill="#3fbfff"/>
+                        <rect x="12" y="6" width="4" height="4" transform="rotate(45 12 6)" fill="#3fbfff"/>
+                        <rect x="16" y="10" width="4" height="4" transform="rotate(45 16 10)" fill="#3fbfff"/>
+                        <rect x="20" y="14" width="4" height="4" transform="rotate(45 20 14)" fill="#3fbfff"/>
+                        <rect x="24" y="18" width="4" height="4" transform="rotate(45 24 18)" fill="#3fbfff"/>
+                        <rect x="8" y="10" width="4" height="4" transform="rotate(45 8 10)" fill="#3fbfff"/>
+                        <rect x="12" y="14" width="4" height="4" transform="rotate(45 12 14)" fill="#3fbfff"/>
+                        <rect x="16" y="18" width="4" height="4" transform="rotate(45 16 18)" fill="#3fbfff"/>
+                        <rect x="20" y="22" width="4" height="4" transform="rotate(45 20 22)" fill="#3fbfff"/>
+                        <rect x="4" y="14" width="4" height="4" transform="rotate(45 4 14)" fill="#3fbfff"/>
+                        <rect x="8" y="18" width="4" height="4" transform="rotate(45 8 18)" fill="#3fbfff"/>
+                        <rect x="12" y="22" width="4" height="4" transform="rotate(45 12 22)" fill="#3fbfff"/>
+                        <rect x="16" y="26" width="4" height="4" transform="rotate(45 16 26)" fill="#3fbfff"/>
+                    </svg>
+                    <span class="logo-text">KINORA</span>
+                </div>
+                <div class="actions">
+                    <form method="POST" class="search-box" action="/">
+                        <input type="text" name="movie" placeholder="SEARCH MOVIE" required>
+                        <button type="submit" style="background:none; border:none; cursor:pointer;">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+
+                    {% if session.get('user_id') %}
+                    <div class="user-menu">
+                        <button class="profile-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/profile">View Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="login-btn">
+                        <span>LOGIN/REGISTER</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </header>
+<div class="background-glow"></div>
+
+<div class="login-container">
+
+
+<div class="login-box">
+
+    <h1 class="login-heading">REGISTER</h1>
+    {% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+    {% endif %}
+    <form method="POST">
+
+        <div class="input-row">
+            <label>USERNAME</label>
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter Username"
+                required>
+        </div>
+
+        <div class="input-row">
+            <label>EMAIL</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter a valid email address"
+                required>
+        </div>
+        <div class="input-row">
+            <label>AGE</label>
+
+            <input
+                type="number"
+                name="age"
+                placeholder="Enter Age"
+                required>
+            </div>
+            <div class="input-row">
+
+    <label>OCCUPATION</label>
+
+    <select name="occupation" required>
+
+        <option value="0">Other / Not Specified</option>
+        <option value="1">Academic / Educator</option>
+        <option value="2">Artist</option>
+        <option value="3">Clerical / Admin</option>
+        <option value="4">College / Grad Student</option>
+        <option value="5">Customer Service</option>
+        <option value="6">Doctor / Health Care</option>
+        <option value="7">Executive / Managerial</option>
+        <option value="8">Farmer</option>
+        <option value="9">Homemaker</option>
+        <option value="10">K-12 Student</option>
+        <option value="11">Lawyer</option>
+        <option value="12">Programmer</option>
+        <option value="13">Retired</option>
+        <option value="14">Sales / Marketing</option>
+        <option value="15">Scientist</option>
+        <option value="16">Self-Employed</option>
+        <option value="17">Technician / Engineer</option>
+        <option value="18">Tradesman / Craftsman</option>
+        <option value="19">Unemployed</option>
+        <option value="20">Writer</option>
+
+    </select>
+
+</div>
+<div class="input-row">
+
+    <label>GENDER</label>
+
+    <select name="gender" required>
+
+        <option value="">Select Gender</option>
+
+        <option value="Male">Male</option>
+
+        <option value="Female">Female</option>
+
+
+    </select>
+
+</div>
+        <div class="input-row">
+            <label>PASSWORD</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required>
+        </div>
+
+        <div class="input-row">
+            <label>CONFIRM</label>
+            <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm password"
+                required>
+        </div>
+<div class="input-row">
+
+    <label>FAVORITE GENRES</label>
+
+    <div class="genre-selector">
+
+        <input type="checkbox" id="fav-romance" name="favorite_genres" value="Romance">
+        <label for="fav-romance" class="genre-chip">Romance</label>
+
+        <input type="checkbox" id="fav-drama" name="favorite_genres" value="Drama">
+        <label for="fav-drama" class="genre-chip">Drama</label>
+
+        <input type="checkbox" id="fav-comedy" name="favorite_genres" value="Comedy">
+        <label for="fav-comedy" class="genre-chip">Comedy</label>
+
+        <input type="checkbox" id="fav-action" name="favorite_genres" value="Action">
+        <label for="fav-action" class="genre-chip">Action</label>
+
+        <input type="checkbox" id="fav-adventure" name="favorite_genres" value="Adventure">
+        <label for="fav-adventure" class="genre-chip">Adventure</label>
+
+        <input type="checkbox" id="fav-scifi" name="favorite_genres" value="Sci-Fi">
+        <label for="fav-scifi" class="genre-chip">Sci-Fi</label>
+
+        <input type="checkbox" id="fav-fantasy" name="favorite_genres" value="Fantasy">
+        <label for="fav-fantasy" class="genre-chip">Fantasy</label>
+
+        <input type="checkbox" id="fav-horror" name="favorite_genres" value="Horror">
+        <label for="fav-horror" class="genre-chip">Horror</label>
+
+    </div>
+
+</div>
+
+<div class="input-row">
+
+    <label>GENRES YOU DISLIKE</label>
+
+    <div class="genre-selector">
+
+        <input type="checkbox" id="dis-romance" name="disliked_genres" value="Romance">
+        <label for="dis-romance" class="genre-chip">Romance</label>
+
+        <input type="checkbox" id="dis-drama" name="disliked_genres" value="Drama">
+        <label for="dis-drama" class="genre-chip">Drama</label>
+
+        <input type="checkbox" id="dis-comedy" name="disliked_genres" value="Comedy">
+        <label for="dis-comedy" class="genre-chip">Comedy</label>
+
+        <input type="checkbox" id="dis-action" name="disliked_genres" value="Action">
+        <label for="dis-action" class="genre-chip">Action</label>
+
+        <input type="checkbox" id="dis-adventure" name="disliked_genres" value="Adventure">
+        <label for="dis-adventure" class="genre-chip">Adventure</label>
+
+        <input type="checkbox" id="dis-scifi" name="disliked_genres" value="Sci-Fi">
+        <label for="dis-scifi" class="genre-chip">Sci-Fi</label>
+
+        <input type="checkbox" id="dis-fantasy" name="disliked_genres" value="Fantasy">
+        <label for="dis-fantasy" class="genre-chip">Fantasy</label>
+
+        <input type="checkbox" id="dis-horror" name="disliked_genres" value="Horror">
+        <label for="dis-horror" class="genre-chip">Horror</label>
+
+    </div>
+
+</div>
+        <button class="login-btn-custom" type="submit">
+            CREATE ACCOUNT
+        </button>
+
+    </form>
+
+    <p class="register-text">
+        Already have an account?
+        <a href="/login">Login Here</a>
+    </p>
+
+</div>
+
+
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+    {% from "macros.html" import movie_row %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reco Frnd</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="background-glow"></div>
+        <div class="container">
+            <header class="header">
+                <div class="logo">
+                    <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="16" y="2" width="4" height="4" transform="rotate(45 16 2)" fill="#3fbfff"/>
+                        <rect x="20" y="6" width="4" height="4" transform="rotate(45 20 6)" fill="#3fbfff"/>
+                        <rect x="24" y="10" width="4" height="4" transform="rotate(45 24 10)" fill="#3fbfff"/>
+                        <rect x="28" y="14" width="4" height="4" transform="rotate(45 28 14)" fill="#3fbfff"/>
+                        <rect x="12" y="6" width="4" height="4" transform="rotate(45 12 6)" fill="#3fbfff"/>
+                        <rect x="16" y="10" width="4" height="4" transform="rotate(45 16 10)" fill="#3fbfff"/>
+                        <rect x="20" y="14" width="4" height="4" transform="rotate(45 20 14)" fill="#3fbfff"/>
+                        <rect x="24" y="18" width="4" height="4" transform="rotate(45 24 18)" fill="#3fbfff"/>
+                        <rect x="8" y="10" width="4" height="4" transform="rotate(45 8 10)" fill="#3fbfff"/>
+                        <rect x="12" y="14" width="4" height="4" transform="rotate(45 12 14)" fill="#3fbfff"/>
+                        <rect x="16" y="18" width="4" height="4" transform="rotate(45 16 18)" fill="#3fbfff"/>
+                        <rect x="20" y="22" width="4" height="4" transform="rotate(45 20 22)" fill="#3fbfff"/>
+                        <rect x="4" y="14" width="4" height="4" transform="rotate(45 4 14)" fill="#3fbfff"/>
+                        <rect x="8" y="18" width="4" height="4" transform="rotate(45 8 18)" fill="#3fbfff"/>
+                        <rect x="12" y="22" width="4" height="4" transform="rotate(45 12 22)" fill="#3fbfff"/>
+                        <rect x="16" y="26" width="4" height="4" transform="rotate(45 16 26)" fill="#3fbfff"/>
+                    </svg>
+                    <span class="logo-text">KINORA</span>
+                </div>
+                <div class="actions">
+                    <form method="POST" class="search-box">
+                        <input type="text" name="movie" placeholder="SEARCH MOVIE" required>
+                        <button type="submit" style="background:none; border:none; cursor:pointer;">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+
+                    {% if session.get('user_id') %}
+                    <div class="user-menu">
+                        <button class="profile-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/profile">View Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="login-btn">
+                        <span>LOGIN/REGISTER</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main>
+                
+
+                {% if not is_search %}
+                <section class="featured-carousel" id="featuredCarousel">
+                    {% if not session.get("user_id") %}
+                <div class="carousel-slide active" data-index="0">
+                    <img src="{{ url_for('static', filename='images/kinora_banner1.png') }}"
+                        alt="Kinora">
+                        
+                    <div class="banner-actions">
+                        <a href="/login" class="banner-btn">Login</a>
+                        <a href="/register" class="banner-btn">Register</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                    {% for movie in hero_movies %}
+                    <div class="carousel-slide 
+                    {% if session.get('user_id') %}
+                        {% if loop.index0 == 0 %}active
+                        {% elif loop.index0 == 1 %}right-card
+                        {% elif loop.index0 == hero_movies|length - 1 %}left-card
+                        {% endif %}
+                    {% else %}
+                        {% if loop.index0 == 0 %}right-card{% endif %}
+                        {% endif %}"
+                    data-index="{% if session.get('user_id') %}{{ loop.index0 }}{% else %}{{ loop.index }}{% endif %}">
+                        <a href="/movie/{{ movie.id }}">
+                            <img src="{{ movie.backdrop }}" loading="lazy" alt="{{ movie.title }}" onerror="this.src='{{ movie.poster }}'">
+                             <span class="hero-badge"> {{ "✦TOP PICKS FOR YOU" if session.get('user_id') else "TRENDING NOW" }}</span>
+                            <div class="carousel-info">
+
+                                <h2 class="carousel-title">{{ movie.title }}</h2>
+                                <div class="carousel-genres" >
+                                    {% for genre in movie.genres.split(',') %}
+                                        <span>{{ genre }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+                    <button class="carousel-btn left" id="carouselPrev">❮</button>
+                    <button class="carousel-btn right" id="carouselNext">❯</button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </section>
+                {% endif %}
+
+                {% if more_recommendations and not is_search %}
+                <h2 class="section-title">More Recommendations</h2>
+                <div class="movie-grid-wrapper">
+                    <button class="grid-nav-btn left-btn" onclick="scrollGrid('recommendedGrid', -1)">❮</button>
+                    <section class="movie-grid" id="recommendedGrid">
+                        {% for movie in more_recommendations %}
+                        <a href="/movie/{{movie.id}}">
+                            <div class="movie-card">
+                                {% if movie.poster %}
+                                <img src="{{ movie.poster }}" loading="lazy" alt="Movie Poster">
+                                {% endif %}
+                                <div class="movie-title" data-title="{{ movie.title | lower }}">{{ movie.title }}</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </section>
+                    <button class="grid-nav-btn right-btn" onclick="scrollGrid('recommendedGrid', 1)">❯</button>
+                </div>
+                {% endif %}
+                 {% if is_search %}
+
+    {% if movies %}
+
+        {{ movie_row("Search Results", movies, "searchGrid") }}
+
+    {% else %}
+
+<div class="no-results">
+
+    <div class="no-results-icon">
+        🎬
+    </div>
+
+    <h2>We couldn't find that movie</h2>
+
+    <p>
+        Sorry, we searched our collection but couldn't
+        find a match for your search.
+    </p>
+
+    <div class="tips">
+
+        <div>✓ Check the spelling</div>
+
+        <div>✓ Try the original movie title</div>
+
+        <div>✓ Search using fewer words</div>
+
+    </div>
+
+    <a href="/" class="back-home-btn">
+        Back to Home
+    </a>
+
+</div>
+
+{% endif %}
+
+{% else %}
+
+    {{ movie_row("Trending Now", movies, "trendingGrid") }}
+
+{% endif %}
+                {% if not is_search %}
+
+{{ movie_row("Action Movies", action_movies, "actionGrid") }}
+
+{{ movie_row("Comedy Movies", comedy_movies, "comedyGrid") }}
+
+{{ movie_row("Romance & Drama", rom_drama_movies, "romDramaGrid") }}
+
+{{ movie_row("Sci-Fi Movies", scifi_movies, "scifiGrid") }}
+
+{% endif %}
+               
+            </main> 
+        </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+    </html>

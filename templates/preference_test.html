@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Preferences</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="background-glow"></div>
+
+<div class="preference-container">
+
+    <div class="preference-card">
+
+        <h1>MOVIE PREFERENCES</h1>
+
+        <p class="preference-subtitle">
+            Rate how much you like each genre from 0 to 5.
+        </p>
+
+        <form method="POST">
+
+            {% for genre in genres %}
+
+            <div class="genre-row">
+
+                <label>{{ genre }}</label>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="5"
+                    value="0"
+                    name="{{ genre }}"
+                    class="genre-slider"
+                >
+
+                <span class="slider-value">0</span>
+
+            </div>
+
+            {% endfor %}
+
+            <button type="submit" class="save-pref-btn">
+                SAVE PREFERENCES
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+document.querySelectorAll('.genre-slider').forEach(slider => {
+
+    const valueBox = slider.nextElementSibling;
+
+    slider.addEventListener('input', () => {
+        valueBox.textContent = slider.value;
+    });
+
+});
+
+</script>
+
+</body>
+</html>

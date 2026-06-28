@@ -1,0 +1,163 @@
+{% from "macros.html" import movie_row %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ movie.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="details-page">
+ <header class="header">
+                <div class="logo">
+                    <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="16" y="2" width="4" height="4" transform="rotate(45 16 2)" fill="#3fbfff"/>
+                        <rect x="20" y="6" width="4" height="4" transform="rotate(45 20 6)" fill="#3fbfff"/>
+                        <rect x="24" y="10" width="4" height="4" transform="rotate(45 24 10)" fill="#3fbfff"/>
+                        <rect x="28" y="14" width="4" height="4" transform="rotate(45 28 14)" fill="#3fbfff"/>
+                        <rect x="12" y="6" width="4" height="4" transform="rotate(45 12 6)" fill="#3fbfff"/>
+                        <rect x="16" y="10" width="4" height="4" transform="rotate(45 16 10)" fill="#3fbfff"/>
+                        <rect x="20" y="14" width="4" height="4" transform="rotate(45 20 14)" fill="#3fbfff"/>
+                        <rect x="24" y="18" width="4" height="4" transform="rotate(45 24 18)" fill="#3fbfff"/>
+                        <rect x="8" y="10" width="4" height="4" transform="rotate(45 8 10)" fill="#3fbfff"/>
+                        <rect x="12" y="14" width="4" height="4" transform="rotate(45 12 14)" fill="#3fbfff"/>
+                        <rect x="16" y="18" width="4" height="4" transform="rotate(45 16 18)" fill="#3fbfff"/>
+                        <rect x="20" y="22" width="4" height="4" transform="rotate(45 20 22)" fill="#3fbfff"/>
+                        <rect x="4" y="14" width="4" height="4" transform="rotate(45 4 14)" fill="#3fbfff"/>
+                        <rect x="8" y="18" width="4" height="4" transform="rotate(45 8 18)" fill="#3fbfff"/>
+                        <rect x="12" y="22" width="4" height="4" transform="rotate(45 12 22)" fill="#3fbfff"/>
+                        <rect x="16" y="26" width="4" height="4" transform="rotate(45 16 26)" fill="#3fbfff"/>
+                    </svg>
+                    <span class="logo-text">KINORA</span>
+                </div>
+                <div class="actions">
+                    <form method="POST" class="search-box" action="/">
+                        <input type="text" name="movie" placeholder="SEARCH MOVIE" required>
+                        <button type="submit" style="background:none; border:none; cursor:pointer;">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+
+                    {% if session.get('user_id') %}
+                    <div class="user-menu">
+                        <button class="profile-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/profile">View Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="login-btn">
+                        <span>LOGIN/REGISTER</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </header>
+<div class="background-glow"></div>
+
+<div class="container">
+
+    <div class="movie-detail-container">
+
+        <!-- LEFT: Poster -->
+        <div class="poster-section">
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"  decoding="async">
+        </div>
+
+        <!-- RIGHT: Info -->
+        <div class="info-section">
+            <h2>{{ movie.title }}</h2>
+
+            <p><strong>GENRE:</strong>
+            {%for g in movie.genres%}
+                {{g.name}}{%if not loop.last%}, {% endif %}
+            {% endfor %}
+            </p>
+            <p><strong>DIRECTOR:</strong> {{director}} </p>
+            <p><strong>RELEASE DATE:</strong> {{ movie.release_date }}</p>
+            <p><strong>RUN TIME:</strong> {{ movie.runtime }} min </p>
+            <p><strong>STATUS:</strong> {{ movie.status }} </p>
+            <p><strong>RATING:</strong> {{ "%.1f"|format(movie.vote_average) }} </p>
+
+            <br>
+
+            <p><strong>DESCRIPTION:</strong></p>
+            <p>{{ movie.overview }}</p>
+            <br><br>
+        </div>
+<div class="rating-card">
+
+    
+        <h3>Rate this Movie</h3>
+    <form method="POST" action="/rate">
+    <form method="POST" action="/rate">
+
+        <input type="hidden"
+               name="movie_id"
+               value="{{ movie.id }}">
+
+        <div class="star-rating">
+
+            <input type="radio" name="rating" value="5" id="star5">
+            <label for="star5">★</label>
+
+            <input type="radio" name="rating" value="4" id="star4">
+            <label for="star4">★</label>
+
+            <input type="radio" name="rating" value="3" id="star3">
+            <label for="star3">★</label>
+
+            <input type="radio" name="rating" value="2" id="star2">
+            <label for="star2">★</label>
+
+            <input type="radio" name="rating" value="1" id="star1">
+            <label for="star1">★</label>
+
+        </div>
+
+        <button type="submit" class="rate-btn">
+            {% if user_rating %}
+                UPDATE RATING
+            {% else %}
+                SUBMIT
+            {% endif %}
+        </button>
+
+    </form>
+
+</div>
+    </div>
+<br><br><br>
+    <div class="cast-section">
+    <p class="cast-title"><strong>CAST:</strong></p>
+
+    <div class="cast-grid">
+        {% for actor in cast %}
+        <div class="actor-card">
+            <img src="https://image.tmdb.org/t/p/w200{{ actor.profile_path }}" loading="lazy"  decoding="async">
+            <p class="actor-name">{{ actor.name }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</div>
+
+</div>
+
+{% if similar_movies %}
+    {{ movie_row("Similar Movies",similar_movies,"similarGrid",False) }}
+{% endif %}
+</form>
+</body>
+</html>

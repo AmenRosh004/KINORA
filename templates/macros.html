@@ -1,0 +1,36 @@
+{% macro movie_row(title,movies,grid_id,show_arrows=True) %}
+<h2 class="section-title">{{ title }}</h2>
+<div class="movie-grid-wrapper">
+    {% if show_arrows %}
+    <button class="grid-nav-btn left-btn"
+            onclick="scrollGrid('{{ grid_id }}', -1)">
+        ❮
+    </button>
+    {% endif %}
+    <section class="movie-grid" id="{{ grid_id }}">
+
+        {% for movie in movies %}
+        <a href="/movie/{{ movie.id }}">
+            <div class="movie-card">
+                
+                <img src="{{ movie.poster_url or movie.poster }}"
+                     alt="{{ movie.title }}"  loading="lazy" decoding="async">
+
+                <div class="movie-title">
+                    {{ movie.title }}
+                </div>
+
+            </div>
+        </a>
+        {% endfor %}
+
+    </section>
+    {% if show_arrows %}
+    <button class="grid-nav-btn right-btn"
+            onclick="scrollGrid('{{ grid_id }}', 1)">
+        ❯
+    </button>
+    {% endif %}
+</div>
+
+{% endmacro %}
