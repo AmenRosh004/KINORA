@@ -1,37 +1,21 @@
-import os
-from dotenv import load_dotenv
 from flask import Flask,render_template,request,redirect,session
-import requests
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from flask_bcrypt import Bcrypt
-import pickle,joblib
 import numpy as np
-from tensorflow.keras.models import load_model
 import json
 from movie_utils import build_movie_vector
-
-load_dotenv()
+from config import (SECRET_KEY,DATABASE_URL,TMDB_API_KEY,user_cols,movie_cols,year_scaler,rating_scaler,user_tower,movie_tower)
+from services.tmdb import (genre_mapping,get_movie_details,get_movie_credits,get_popular_movies,search_movies)
 app=Flask(__name__)
-app.secret_key=os.getenv("SECRET_KEY")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+api_key = TMDB_API_KEY
+app.secret_key = SECRET_KEY
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-with open("new_model/content_based/user_cols.pkl", "rb") as f:
-    user_cols = pickle.load(f)
-
-with open("new_model/content_based/movie_cols.pkl", "rb") as f:
-    movie_cols = pickle.load(f)
-
-year_scaler = joblib.load("new_model/content_based/year_scaler.pkl")
-rating_scaler = joblib.load("new_model/content_based/user_scaler.pkl")
-
-user_tower = load_model("new_model/content_based/user_tower_gelu.keras")
-movie_tower = load_model("new_model/content_based/movie_tower_gelu.keras")
-
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+
 class User(db.Model):
 
     id = db.Column(
@@ -91,7 +75,6 @@ class Movie(db.Model):
     poster_url=db.Column(db.Text)
     backdrop_url=db.Column(db.Text)
 
-api_key=os.getenv("TMDB_API_KEY")
 
 genre_mapping = {
         "Science Fiction": "Sci-Fi",
@@ -269,31 +252,27 @@ def home():
     
     #print(session)
     is_search=False
-    url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}"
+    #url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}"
     if request.method=="POST":
         movie_name=request.form.get("movie","").strip()
 
-        if(movie_name):
+        if movie_name:
             is_search=True
-            url=f"https://api.themoviedb.org/3/search/movie?api_key={api_key}&query={movie_name}"
-    
-    try:
-        response=requests.get(url)
-        data=response.json()
+            data=search_movies(movie_name)
+        else:
+            data=get_popular_movies()  
+    else:
+        data=get_popular_movies()
+    movies = []
 
-        movies=[]
-        
-        for m in data["results"][:20]:
-            if(m["poster_path"] and m['backdrop_path']):
-                movies.append({
-                    "id":m["id"],
-                    "title":m["title"],
-                    "poster":"https://image.tmdb.org/t/p/w500" + m["poster_path"],
-                    "backdrop":"https://image.tmdb.org/t/p/original"+ m["backdrop_path"]
-                })
-    except Exception as e:
-        print("API ERROR: ",e)
-        movies=[]
+    for m in data["results"][:20]:
+        if m["poster_path"] and m["backdrop_path"]:
+            movies.append({
+                "id": m["id"],
+                "title": m["title"],
+                "poster": "https://image.tmdb.org/t/p/w500" + m["poster_path"],
+                "backdrop": "https://image.tmdb.org/t/p/original" + m["backdrop_path"]
+            })
     recommended = []   
     hero_movies=[]
     more_recommendations=[] 
@@ -331,20 +310,15 @@ def home():
 
 @app.route("/movie/<int:movie_id>")
 def movie_details(movie_id):
-    url= f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}"
-    response=requests.get(url)
-    data=response.json()
-
-    credit_url=f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={api_key}"
-    credit_response=requests.get(credit_url)
-    credit_data=credit_response.json()
+    data=get_movie_details(movie_id)
+    credit_data = get_movie_credits(movie_id)
     director="Not Available"
-    for person in credit_data["crew"]:
+    for person in credit_data.get("crew",[]):
         if person["job"]=="Director":
             director=person["name"]
             break
     cast=[]
-    for actor in credit_data["cast"][:18]:
+    for actor in credit_data.get("cast",[])[:18]:
         if actor["profile_path"]:
             cast.append(actor)
     db_movie=Movie.query.get(movie_id)
@@ -489,15 +463,10 @@ def rate():
     movie = Movie.query.get(movie_id)
     if not movie:
 
-        url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}"
-
-        response = requests.get(url)
-
-        data = response.json()
+        data = get_movie_details(movie_id)
 
         genre_names = []
-
-        for genre in data["genres"]:
+        for genre in data.get("genres",[]):
             genre_names.append(genre["name"])
 
         genres_string = ",".join(genre_names)
