@@ -75,26 +75,40 @@
         </div>
 
         <!-- RIGHT: Info -->
-        <div class="info-section">
-            <h2>{{ movie.title }}</h2>
+       <div class="info-section">
 
-            <p><strong>GENRE:</strong>
-            {%for g in movie.genres%}
-                {{g.name}}{%if not loop.last%}, {% endif %}
-            {% endfor %}
-            </p>
-            <p><strong>DIRECTOR:</strong> {{director}} </p>
-            <p><strong>RELEASE DATE:</strong> {{ movie.release_date }}</p>
-            <p><strong>RUN TIME:</strong> {{ movie.runtime }} min </p>
-            <p><strong>STATUS:</strong> {{ movie.status }} </p>
-            <p><strong>RATING:</strong> {{ "%.1f"|format(movie.vote_average) }} </p>
+    <h1 class="movie-heading">{{ movie.title }}</h1>
 
-            <br>
+    <div class="movie-meta">
+        <span>⭐ {{ "%.1f"|format(movie.vote_average) }}</span>
+        <span>{{ movie.status }}</span>
 
-            <p><strong>DESCRIPTION:</strong></p>
-            <p>{{ movie.overview }}</p>
-            <br><br>
-        </div>
+        {% if movie.release_date %}
+        <span>{{ movie.release_date[:4] }}</span>
+        {% endif %}
+
+        {% if movie.runtime %}
+        <span>{{ movie.runtime }} min</span>
+        {% endif %}
+    </div>
+
+    <div class="genre-tags">
+        {% for g in movie.genres %}
+            <span>{{ g.name }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="overview-section">
+        <h3>OVERVIEW</h3>
+        <p>{{ movie.overview }}</p>
+    </div>
+
+    <div class="director-section">
+        <h3>DIRECTED BY</h3>
+        <p>{{ director }}</p>
+    </div>
+
+</div>
 <div class="rating-card">
 
     
@@ -138,25 +152,32 @@
 </div>
     </div>
 <br><br><br>
-    <div class="cast-section">
-    <p class="cast-title"><strong>CAST:</strong></p>
+    {% if cast %}
+<div class="cast-section">
+
+    <h2 class="cast-heading">FEATURED CAST</h2>
 
     <div class="cast-grid">
         {% for actor in cast %}
         <div class="actor-card">
-            <img src="https://image.tmdb.org/t/p/w200{{ actor.profile_path }}" loading="lazy"  decoding="async">
+            <img src="https://image.tmdb.org/t/p/w200{{ actor.profile_path }}"
+                 loading="lazy"
+                 decoding="async">
+
             <p class="actor-name">{{ actor.name }}</p>
         </div>
         {% endfor %}
     </div>
+
 </div>
+{% endif %}
 
 </div>
 
 </div>
 
 {% if similar_movies %}
-    {{ movie_row("Similar Movies",similar_movies,"similarGrid",False) }}
+    {{ movie_row("You May Also Like",similar_movies,"similarGrid",False) }}
 {% endif %}
 </form>
 </body>

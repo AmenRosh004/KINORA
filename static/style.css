@@ -317,12 +317,27 @@
         color: #ffffff;
         text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
     }
+.search-results-grid{
 
-    .movie-grid a {
-        flex: 0 0 150px;
-        display: block;
-        text-decoration: none;
-    }
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+
+    gap:30px;
+
+    margin-top:35px;
+
+    margin-bottom:60px;
+}
+
+.search-results-grid a{
+
+    text-decoration:none;
+}
+.search-results-grid .movie-card{
+
+    width:100%;
+}
 
     .movie-detail-container {
         display: flex;
@@ -336,103 +351,263 @@
         border-radius: 12px;
     }
 
-    .info-section {
-        max-width: 600px;
-    }
+   .info-section{
+    flex:1;
+    max-width:700px;
 
-    .info-section h2 {
-        font-size: 32px;
-        margin-bottom: 20px;
-    }
+    display:flex;
+    flex-direction:column;
 
-    .info-section p {
-        margin-bottom: 10px;
-        color: #e0e0e0;
-        letter-spacing: 1px;
-    }
-    .info-section strong {
-        color: #a77cff;
-    }
+    justify-content:flex-start;
+}
+.search-results-grid .movie-card img{
+
+    width:100%;
+}
+.search-results-grid .movie-title{
+
+    text-align:center;
+}
+   .movie-heading{
+
+    font-size:3.5rem;
+
+    font-weight:800;
+
+    color:white;
+
+    line-height:1.05;
+
+    margin-bottom:22px;
+
+    letter-spacing:-1px;
+}
+
+    .info-section p{
+
+    color:#d3d3d3;
+
+    line-height:1.8;
+
+    font-size:1.05rem;
+}
+.movie-meta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:28px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:22px;
+}
+
+.movie-meta span{
+
+    color:#b8b8b8;
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+    position:relative;
+}
+
+.movie-meta span:not(:last-child)::after{
+
+    content:"•";
+
+    position:absolute;
+
+    right:-18px;
+
+    color:#666;
+}
+.genre-tags{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+    margin-bottom:36px;
+}
+
+.genre-tags span{
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    border:1px solid rgba(167,124,255,.35);
+
+    background:rgba(167,124,255,.08);
+
+    color:#d8b8ff;
+
+    font-size:.9rem;
+
+    font-weight:500;
+}
+.overview-section{
+
+    margin-bottom:38px;
+}
+
+.overview-section h3{
+
+    color:#a77cff;
+
+    font-size:.9rem;
+
+    letter-spacing:3px;
+
+    margin-bottom:14px;
+}
+
+.overview-section p{
+
+    color:#d6d6d6;
+
+    font-size:1.08rem;
+
+    line-height:1.9;
+}
+.director-section h3{
+
+    color:#a77cff;
+
+    font-size:.9rem;
+
+    letter-spacing:3px;
+
+    margin-bottom:10px;
+}
+
+.director-section p{
+
+    color:white;
+
+    font-size:1.15rem;
+
+    font-weight:600;
+}
     /* ===== CAST SECTION ===== */
 
-    /* Grid layout (auto wrap + uniform size) */
-    .cast-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 20px;
-        margin-top: 15px;
-    }
+.cast-heading{
+
+    color:white;
+
+    font-size:1.5rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    margin-bottom:10px;
+
+    position:relative;
+}
+.cast-heading::after{
+
+    content:"";
+
+    display:block;
+
+    width:70px;
+
+    height:3px;
+
+    background:#a77cff;
+
+    border-radius:10px;
+
+    margin-top:12px;
+}
+.cast-grid{
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    gap:28px;
+    margin-top:28px;
+}
 
     /* Actor card */
-    .actor-card {
-        width: 100%;
-        max-width: 110px;
-        margin: 0 auto;   /* center cards inside grid */
+.actor-card{
 
-        text-align: center;
-        padding: 4px;
-        border-radius: 12px;
+    background:transparent;
 
-        background: linear-gradient(135deg, #2e2d2d, #050505);
+    text-align:center;
 
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-    }
+    transition:.3s;
+
+    cursor:pointer;
+}
 
     /* Actor image */
-    .actor-card img {
-        width: 100%;
-        height: 110px;          /* 🔥 fixed size */
-        object-fit: cover;      /* 🔥 prevents distortion */
-        border-radius: 10px;
-    }
+.actor-card img{
+
+    width:120px;
+
+    height:120px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:3px solid rgba(167,124,255,.25);
+
+    transition:.3s;
+}
 
     /* Actor name */
-    .actor-name {
-        font-size: 12px;
-        margin-top: 6px;
-        color: white;
-        line-height: 1.2;
+.actor-name{
 
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+    margin-top:14px;
+
+    color:white;
+
+    font-size:.95rem;
+
+    font-weight:600;
+
+    line-height:1.4;
+}
 
     /* Hover effect (same style as movie cards) */
-    .actor-card:hover {
-        transform: scale(1.08);
-        box-shadow:
-            0 0 15px #a77cff,
-            0 0 30px #6e0ae1;
-    }
+.actor-card:hover{
+
+    transform:translateY(-6px);
+}
+
+.actor-card:hover img{
+
+    border-color:#a77cff;
+
+    box-shadow:
+        0 0 18px rgba(167,124,255,.45);
+}
         
     /* Responsive */
-    @media (max-width: 1024px) {
-        .container {
-            padding: 2rem;
-        }
-        .title {
-            font-size: 4rem;
-        }
+@media (max-width: 1200px){
+    .cast-grid{
+        grid-template-columns:repeat(6,1fr);
     }
+}
 
-    @media (max-width: 768px) {
-        .header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 2rem;
-        }
-        .actions {
-            width: 100%;
-            flex-direction: column;
-        }
-        .search-box, .login-btn {
-            width: 100%;
-            max-width: none;
-        }
+@media (max-width: 900px){
+    .cast-grid{
+        grid-template-columns:repeat(4,1fr);
     }
+}
 
+@media (max-width: 600px){
+    .cast-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
     /* ==========================
     LOGIN PAGE
     ========================== */
@@ -529,28 +704,6 @@
     .input-row input::placeholder{
         color:#a77cff;
     }
-    .genre-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    flex:1;
-}
-
-.genre-grid label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-
-    width:auto;
-
-    color:#d1d5db;
-
-    font-size:0.95rem;
-
-    letter-spacing:0;
-
-    cursor:pointer;
-}
 .genre-selector{
     flex:1;
     display:flex;
@@ -741,35 +894,35 @@
     color:#ff6b6b;
     background:rgba(255,107,107,.12);
 }
-    .rating-card{
+.rating-card{
 
-        width:360px;
+    width:320px;
 
-        padding:40px;
+    padding:32px;
 
-        border:1px solid rgba(177, 92, 226, 0.4);
+    align-self:flex-start;
 
-        background:rgba(5,10,25,.75);
+    border-radius:22px;
 
-        backdrop-filter:blur(14px);
+    background:rgba(12,12,24,.82);
 
-        box-shadow:
-            0 0 20px rgba(63,191,255,.15),
-            0 0 50px rgba(63,191,255,.08);
+    border:1px solid rgba(167,124,255,.25);
 
-        border-radius:20px;
-    }
+    backdrop-filter:blur(16px);
 
-    .rating-card h2{
+    box-shadow:
+        0 0 35px rgba(167,124,255,.10);
+}
+.rating-card h3{
 
-        color:#ffffff;
+    color:white;
 
-        font-size:1.8rem;
+    font-size:1.5rem;
 
-        font-weight:600;
+    font-weight:700;
 
-        margin-bottom:30px;
-    }
+    margin-bottom:28px;
+}
 
     .current-rating{
 
@@ -791,16 +944,16 @@
         display:none;
     }
 
-    .star-rating label{
+.star-rating label{
 
-        font-size:3.2rem;
+    font-size:2.8rem;
 
-        color:#50217c;
+    color:#403050;
 
-        cursor:pointer;
+    cursor:pointer;
 
-        transition:all 0.2s ease;
-    }
+    transition:.2s;
+}
 
     .star-rating label:hover,
     .star-rating label:hover ~ label{
@@ -812,14 +965,13 @@
             0 0 20px #4b066b;
     }
 
-    .star-rating input:checked ~ label{
+.star-rating input:checked ~ label{
 
-        color:#641886;
+    color:#a77cff;
 
-        text-shadow:
-
-            0 0 5px #4b066b,
-    }
+    text-shadow:
+        0 0 10px rgba(167,124,255,.45);
+}
 
     .rate-btn{
 
@@ -1341,9 +1493,6 @@
     }
   
 /*buttons in banner*/
-.banner-slide{
-    position: relative;
-}
 
 .banner-actions{
     position:absolute;

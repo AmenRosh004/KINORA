@@ -34,3 +34,40 @@
 </div>
 
 {% endmacro %}
+
+{% macro movie_grid(title, movies,query="") %}
+
+<h2 class="section-title">
+    {{ movies|length }} Results for
+    "<span class="search-highlight">{{ query }}</span>"
+</h2>
+
+<section class="search-results-grid">
+
+    {% for movie in movies %}
+
+    <a href="/movie/{{ movie.id }}">
+
+        <div class="movie-card">
+
+            {% if movie.poster %}
+            <img src="{{ movie.poster_url or movie.poster }}"
+             alt="{{ movie.title }}"
+            loading="lazy"
+             decoding="async">
+            {% endif %}
+
+            <div class="movie-title"
+                 data-title="{{ movie.title|lower }}">
+                {{ movie.title }}
+            </div>
+
+        </div>
+
+    </a>
+
+    {% endfor %}
+
+</section>
+
+{% endmacro %}
